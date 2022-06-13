@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Benet Miso</title>
+</head>
+<body>
+
+    <script type="text/javascript">
+        function getTemperatureMax() {
+            fetch("/temperature_max", {
+                    heasers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then((response) => response.json())
+                .then((data) => { 
+                    document.getElementById("temperature_max").innerHTML=data.temperature_max
+                })
+        }
+
+
+        function getCurrentCapture() {
+            fetch("/current_capture", {
+                    heasers: {
+                        'Content-Type': 'image/png',
+                    }
+                })
+                .then((response) => {return response.blob()})
+                .then(blob => {
+                    var img = URL.createObjectURL(blob)
+                    document.getElementById("currentCapture").setAttribute("src", img)
+                })
+                    
+        }
+
+
+        setInterval(function() {
+            getTemperatureMax()
+            getCurrentCapture()
+        }, 2000); 
+
+    </script>
+
+    <p>&nbsp;</p>
+
+    <div>
+        <span>Temperature (Max) : </span><span id="temperature_max"></span> ℃</span>
+    </div>
+
+    
+    <p>&nbsp;</p>
+
+    <div>
+        <img id="currentCapture" src="" />
+    </div>
+
+    <p>&nbsp;</p>
+
+
+</body>
+</html>
